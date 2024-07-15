@@ -1,0 +1,32 @@
+{
+  "short_name": "MicroApp",
+  "name": "Micro App",
+  "description": "Micro's personal daily life Application",
+  "icons": [
+    {
+      "src": "/pwa/micro-app.ico",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#111827",
+  "theme_color": "#9fe88d",
+  "screenshots": [
+    {
+      "src": "/pwa/micro-app-screen-wide.png",
+      "sizes": "2360x1640",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wide Example screen"
+    },
+    {
+      "src": "/pwa/micro-app-screen-narrow.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Narrow Example screen"
+    }
+  ],
+  "start_url": "./couple-debt",
+  "display": "standalone"
+}
