@@ -10,3 +10,4 @@ Hi everyone!, Welcome to my personal application!
 - TailwindCss
 - Progressive Web App (PWA)
 - Supabase (PostgresQL)
+- Add this to test
