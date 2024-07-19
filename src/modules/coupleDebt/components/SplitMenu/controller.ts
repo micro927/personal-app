@@ -10,7 +10,7 @@ import {
   transformCoupleDebtSplittedListToIndividualExpenseList,
 } from '@utils/data';
 import { getScreenShot } from '@utils/screenShot';
-import type { CoupleDebt } from '@utils/service';
+import type { CoupleDebt } from '@services';
 import { useLocalStorageItem } from '@utils/useLocalStorageItem';
 import { useModal } from '@utils/useModal';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';

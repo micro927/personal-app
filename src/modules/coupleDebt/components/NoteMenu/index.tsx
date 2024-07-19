@@ -2,7 +2,7 @@ import Dropdown from '@components/base/Dropdown';
 import LoadingTableRows from '@components/base/LoadingTableRows';
 import { POSITION } from '@constants/position';
 import { SIZE } from '@constants/size';
-import type { CoupleDebtFormValues, CoupleDebt } from '@utils/service';
+import type { CoupleDebtFormValues, CoupleDebt } from '@services';
 import { Fragment } from 'react';
 import { TbMenu2 } from 'react-icons/tb';
 import useController from './controller';

@@ -2,7 +2,7 @@ import { MainLayoutOutletContext } from '#types/component';
 import { ServiceContext } from '@components/ServiceProvider/context';
 import { COLOR_NAME } from '@constants/colorName';
 import { groupCoupleDebtListByPaidAt } from '@utils/data';
-import type { CoupleDebt, CoupleDebtFormValues } from '@utils/service';
+import type { CoupleDebt, CoupleDebtFormValues } from '@services';
 import { useModal } from '@utils/useModal';
 import { useContext, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';

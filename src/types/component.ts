@@ -1,5 +1,5 @@
 import type { COLOR_NAME } from '@constants/colorName';
-import type { User, UserFormValues } from '@utils/service';
+import type { User, UserFormValues } from '@services';
 
 export type AlertTypeColor =
   | COLOR_NAME.INFO

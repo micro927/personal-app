@@ -5,7 +5,7 @@ import Dropdown from '@components/base/Dropdown';
 import { COLOR_NAME } from '@constants/colorName';
 import { POSITION } from '@constants/position';
 import { cx } from '@emotion/css';
-import type { ExpenseType } from '@utils/service';
+import type { ExpenseType } from '@services';
 
 function ForMonnyMenu({ expenseType }: { expenseType: ExpenseType[] }) {
   const {

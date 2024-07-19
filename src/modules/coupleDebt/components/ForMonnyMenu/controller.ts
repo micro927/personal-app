@@ -1,7 +1,7 @@
 import { AuthContext } from '@components/AuthProvider/context';
 import { ServiceContext } from '@components/ServiceProvider/context';
 import { groupIndividualExpenseListByPaidAt } from '@utils/data';
-import { IndividualExpense } from '@utils/service';
+import { IndividualExpense } from '@services';
 import { snakeToTitleCase } from '@utils/snakeToTitleCase';
 import { useContext, useEffect, useMemo, useState } from 'react';
 

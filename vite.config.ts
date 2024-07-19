@@ -10,6 +10,7 @@ export default defineConfig({
       '@components': '/src/components',
       '@constants': '/src/constants',
       '@modules': '/src/modules',
+      '@services': '/src/services',
       '@utils': '/src/utils',
       '#types': '/src/types',
     },

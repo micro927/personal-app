@@ -1,6 +1,6 @@
 import { AuthContext } from '@components/AuthProvider/context';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { CoupleDebtFormValues } from '@utils/service';
+import type { CoupleDebtFormValues } from '@services';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

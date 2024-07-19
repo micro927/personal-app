@@ -1,4 +1,4 @@
-import type { CoupleDebt } from '@utils/service';
+import type { CoupleDebt } from '@services';
 import useController from './controller';
 import LoadingTableRows from '@components/base/LoadingTableRows';
 import { cx } from '@emotion/css';

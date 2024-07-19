@@ -1,4 +1,4 @@
-import { service } from '@utils/service';
+import { service } from '@services';
 import type { PropsWithChildren } from 'react';
 import { ServiceContext } from './context';
 

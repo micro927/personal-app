@@ -1,4 +1,4 @@
-import type { User } from '@utils/service';
+import type { User } from '@services';
 import { AuthContext } from '@components/AuthProvider/context';
 import Button from '@components/base/Button';
 import TopRoundedContentBox from '@components/base/TopRoundedContentBox';

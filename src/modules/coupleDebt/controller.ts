@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import type { Menu } from './components/ViewTab';
 import { ServiceContext } from '@components/ServiceProvider/context';
-import { CoupleDebt, type ExpenseType } from '@utils/service';
+import { CoupleDebt, type ExpenseType } from '@services';
 import { COUPLE_DEBT_MENU_KEY } from '@constants/microApp';
 import { useUserActivity } from '@utils/useUserActivity';
 

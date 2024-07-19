@@ -2,7 +2,7 @@ import Button from '@components/base/Button';
 import DatePickerInput from '@components/base/DatePickerInput';
 import Modal from '@components/base/Modal';
 import { COLOR_NAME } from '@constants/colorName';
-import type { CoupleDebtFormValues } from '@utils/service';
+import type { CoupleDebtFormValues } from '@services';
 import type { RefObject } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { TbMessage2Plus } from 'react-icons/tb';

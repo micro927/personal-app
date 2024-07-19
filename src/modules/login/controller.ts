@@ -1,6 +1,6 @@
 import { AuthContext } from '@components/AuthProvider/context';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { UserFormValues } from '@utils/service';
+import type { UserFormValues } from '@services';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

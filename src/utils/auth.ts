@@ -1,4 +1,4 @@
-import type { User } from '@utils/service';
+import type { User } from '@services';
 
 const LOCAL_STORAGE_USER = 'app-user';
 

@@ -1,5 +1,5 @@
 import type { QueryData } from '@supabase/supabase-js';
-import supabase from './supabase';
+import supabase from '../utils/supabase';
 
 export const service = () => {
   const users = () => supabase.from('users');

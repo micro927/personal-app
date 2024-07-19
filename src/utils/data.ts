@@ -5,7 +5,7 @@ import type {
   IndividualExpense,
   CoupleDebt,
   IndividualExpenseFormValues,
-} from './service';
+} from '../services';
 
 const groupDataByPaidAt = <DataType extends { paid_at: string }>(
   dataList: DataType[]

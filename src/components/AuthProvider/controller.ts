@@ -1,7 +1,7 @@
 import type { AuthContextType } from '#types/component';
 import { ServiceContext } from '@components/ServiceProvider/context';
 import { getStorageUser, removeStorageUser, setStorageUser } from '@utils/auth';
-import type { User, UserFormValues } from '@utils/service';
+import type { User, UserFormValues } from '@services';
 import { useContext, useState } from 'react';
 
 function useController() {
