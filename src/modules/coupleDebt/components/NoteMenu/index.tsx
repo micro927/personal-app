@@ -82,6 +82,7 @@ function NoteMenu({
                           </td>
                           <td className="w-1/5">
                             <Dropdown
+                              key={`${id}-dropdown-menu-${rowKey}`}
                               id={`couple-debt-${id}-${key}-action`}
                               size={SIZE.SMALL}
                               position={POSITION.BOTTOM_LEFT}

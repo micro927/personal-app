@@ -219,7 +219,7 @@ function SplitMenu({
                 </div>
               </div>
               <label className="label label-text-alt">Total</label>
-              <div className="stats w-full shadow">
+              <div className="stats w-full overflow-hidden shadow">
                 <div className="stat">
                   <div className="stat-figure text-primary">
                     <TbCash size={18} />

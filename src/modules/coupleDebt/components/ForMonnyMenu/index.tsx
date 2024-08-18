@@ -59,9 +59,9 @@ function ForMonnyMenu({ expenseType }: { expenseType: ExpenseType[] }) {
                                   buttonContent={() => (
                                     <div
                                       className={cx(
-                                        'badge badge-sm w-full',
+                                        'badge badge-sm w-full text-nowrap',
                                         typeTitle === 'None'
-                                          ? 'badge-accent badge-outline text-nowrap'
+                                          ? 'badge-accent badge-outline'
                                           : colorClass
                                       )}
                                     >

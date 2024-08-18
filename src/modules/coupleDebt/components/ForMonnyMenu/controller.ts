@@ -4,6 +4,7 @@ import { groupIndividualExpenseListByPaidAt } from '@utils/data';
 import { IndividualExpense } from '@services';
 import { snakeToTitleCase } from '@utils/snakeToTitleCase';
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { differenceInMinutes } from 'date-fns';
 
 function useController() {
   const { individualExpenseService } = useContext(ServiceContext);
@@ -34,7 +35,9 @@ function useController() {
       : individualExpenseList.filter(
           ({ is_from_couple_debt }) => is_from_couple_debt
         );
-    return groupIndividualExpenseListByPaidAt(dataList);
+    return groupIndividualExpenseListByPaidAt(dataList).sort((a, b) =>
+      differenceInMinutes(b.date, a.date)
+    );
   }, [isIncludePersonalExpense, individualExpenseList]);
 
   const toggleIsIncludeButton = () =>

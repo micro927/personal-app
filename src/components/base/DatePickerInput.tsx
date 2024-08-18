@@ -3,8 +3,10 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import Datepicker from 'tailwind-datepicker-react';
 
 function DatePickerInput({
+  defaultDate,
   setValueFunction,
 }: {
+  defaultDate: Date;
   setValueFunction: (date: Date) => void;
 }) {
   const [show, setShow] = useState<boolean>(false);
@@ -36,7 +38,7 @@ function DatePickerInput({
           next: () => <FiArrowRight />,
         },
         datepickerClassNames: 'fixed bottom-0 right-1/2 translate-x-1/2 z-50',
-        defaultDate: new Date(),
+        defaultDate,
         language: 'en',
         disabledDates: [],
         weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],

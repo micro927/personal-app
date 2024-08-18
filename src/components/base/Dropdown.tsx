@@ -66,7 +66,7 @@ function Dropdown({
       >
         {menuList.map(({ content, onclick }, key) => {
           return (
-            <li key={key}>
+            <li key={`${id}-li-${key}`}>
               <div
                 onClick={() => {
                   document.getElementById(id)?.removeAttribute('open');

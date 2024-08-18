@@ -62,6 +62,7 @@ function useController({
       .then(() => {
         setIsLoading(false);
         closeFormModal();
+        resetForm();
       })
       .catch(() => {
         setIsLoading(false);

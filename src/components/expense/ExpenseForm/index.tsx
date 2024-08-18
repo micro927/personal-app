@@ -40,6 +40,7 @@ function ExpenseFormModal({
   });
   const { isValid, errors } = formState;
   const selectedUserId = watch().user_id;
+  const defaultPaidAtDate = new Date(watch().paid_at);
   return (
     <Modal
       modalId="add-expense-modal"
@@ -97,7 +98,10 @@ function ExpenseFormModal({
           <label htmlFor="paid_at" className="label label-text-alt">
             Paid date
           </label>
-          <DatePickerInput setValueFunction={setPaidAt} />
+          <DatePickerInput
+            defaultDate={defaultPaidAtDate}
+            setValueFunction={setPaidAt}
+          />
           <div className="label h-9">
             {!isValid && errors.root?.message && (
               <div className="label-text-alt flex items-center gap-1 text-error">
