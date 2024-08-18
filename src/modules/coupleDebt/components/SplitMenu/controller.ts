@@ -114,6 +114,7 @@ function useController({
           )
           .then(() => {
             onDataUpdate?.();
+            setCoupleDebtSplittedList([]);
             showAlert({ text: 'All debts are Clear Completely!' });
             setIsLoading(false);
             clearSplittedListLocalStorage();
