@@ -27,6 +27,6 @@
       "label": "Narrow Example screen"
     }
   ],
-  "start_url": "./couple-debt",
+  "start_url": "./",
   "display": "standalone"
 }
