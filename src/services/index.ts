@@ -1,5 +1,6 @@
 import type { QueryData } from '@supabase/supabase-js';
 import supabase from '../utils/supabase';
+import { botApi, createCurrencyRateEndpoint } from '@utils/bankOfThailand';
 
 export const service = () => {
   const users = () => supabase.from('users');
@@ -65,11 +66,38 @@ export const service = () => {
     },
   };
 
+  const currencyService = {
+    getThaiBahtJapaneseYenRate: async () => {
+      const url = createCurrencyRateEndpoint();
+      return fetch(url, {
+        headers: {
+          [botApi.headerKeys.clientId]: import.meta.env.VITE_BOT_CLIENT_ID,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Error fetching currency rates: ${response.statusText}`
+            );
+          }
+          return response.json();
+        })
+        .then(
+          (data) =>
+            data?.result?.data?.data_detail?.[0]?.mid_rate ?? ('0' as string)
+        )
+        .catch((error) => {
+          throw error;
+        });
+    },
+  };
+
   return {
     usersService,
     coupleDebtService,
     individualExpenseService,
     constantTablesService,
+    currencyService,
   };
 };
 

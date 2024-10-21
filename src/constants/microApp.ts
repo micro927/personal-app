@@ -9,6 +9,12 @@ export const microAppList: MicroAppObject[] = [
       'note expense, split with reasonable amount and give summary balance.',
     route: ROUTE.COUPLE_DEBT,
   },
+  {
+    title: 'Currency Rate',
+    shortTitle: 'JPY',
+    description: 'Real time Thai Baht - Japanese yen rate for travel!',
+    route: ROUTE.CURRENCY_RATE,
+  },
 ];
 
 export enum USER {

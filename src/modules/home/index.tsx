@@ -18,7 +18,7 @@ function Home() {
             <Button onClick={logout}>Logout</Button>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
           {microAppList.map((microApp, index) => (
             <div key={index}>
               <AppLinkCard appObject={microApp} />

@@ -2,6 +2,7 @@ import { AuthContext } from '@components/AuthProvider/context';
 import MainLayout from '@components/layout/Main';
 import { ROUTE } from '@constants/route';
 import CoupleDebt from '@modules/coupleDebt';
+import CurrencyRate from '@modules/currencyRate';
 import Home from '@modules/home';
 import Login from '@modules/login';
 import { useContext } from 'react';
@@ -24,6 +25,10 @@ const routes: RouteObject[] = [
       {
         path: ROUTE.COUPLE_DEBT,
         element: <CoupleDebt />,
+      },
+      {
+        path: ROUTE.CURRENCY_RATE,
+        element: <CurrencyRate />,
       },
     ],
   },
