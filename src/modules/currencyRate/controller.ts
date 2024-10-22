@@ -10,7 +10,7 @@ const LOCAL_STORAGE_CUSTOM_CURRENCY = 'custom-currency';
 
 const fromValuesSchema = z.object({
   thb: z.string().optional(),
-  jpy: z.array(z.string().optional()),
+  jpy: z.array(z.string()),
 });
 
 type FormSchema = z.infer<typeof fromValuesSchema>;
@@ -19,11 +19,16 @@ function useController() {
   const {
     get: getCustomCurrencyFromLocalStorage,
     set: setCustomCurrencyToLocalStorage,
-  } = useLocalStorageItem<{ jpy: string }>(LOCAL_STORAGE_CUSTOM_CURRENCY);
+  } = useLocalStorageItem<{ jpy: string; items: string[] }>(
+    LOCAL_STORAGE_CUSTOM_CURRENCY
+  );
 
   const { currencyService } = useContext(ServiceContext);
   const [currency, setCurrency] = useState<string>(
     getCustomCurrencyFromLocalStorage()?.jpy ?? '0'
+  );
+  const [items, setItems] = useState(
+    getCustomCurrencyFromLocalStorage()?.items ?? ['']
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,22 +39,31 @@ function useController() {
     reset: resetForm,
   } = useForm<FormSchema>({
     mode: 'onChange',
+    defaultValues: {
+      jpy: getCustomCurrencyFromLocalStorage()?.items ?? [''],
+    },
     resolver: zodResolver(fromValuesSchema),
   });
 
-  const thbSummary = (sum(watch('jpy')) * (parseFloat(currency) / 100)).toFixed(
-    0
-  );
+  const jpyWatchValues = watch('jpy');
+
+  const thbSummary =
+    sum((jpyWatchValues ?? []).map((val) => (val ? parseFloat(val) : 0))) *
+    (parseFloat(currency) / 100);
 
   useEffect(() => {
-    setValue('thb', thbSummary.toString());
+    setValue(
+      'thb',
+      thbSummary.toLocaleString('en-US', { maximumFractionDigits: 0 })
+    );
+    setItems(watch('jpy') ?? ['']);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thbSummary]);
 
   useEffect(() => {
-    setCustomCurrencyToLocalStorage({ jpy: currency });
+    setCustomCurrencyToLocalStorage({ jpy: currency, items });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currency]);
+  }, [currency, thbSummary]);
 
   const onClickSyncCurrency = () => {
     setIsLoading(true);
@@ -68,6 +82,25 @@ function useController() {
   const onClickDown = () =>
     setCurrency((prev) => (parseFloat(prev) - 0.001).toFixed(3).toString());
 
+  const onClickAddItem = () => {
+    const newItems = [...watch('jpy'), ''];
+    setValue('jpy', newItems);
+    setItems(newItems);
+  };
+
+  const onClickDeleteItem = (index: number) => {
+    const newItems = items.filter((_, thisIndex) => thisIndex != index);
+    setValue('jpy', newItems);
+    setItems(newItems);
+  };
+
+  const onClickGo = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onClickAddItem();
+      event.preventDefault();
+    }
+  };
+
   return {
     isLoading,
     onClickSyncCurrency,
@@ -76,8 +109,12 @@ function useController() {
     register,
     resetForm,
     thbSummary,
+    items,
     onClickUp,
     onClickDown,
+    onClickAddItem,
+    onClickDeleteItem,
+    onClickGo,
   };
 }
 
