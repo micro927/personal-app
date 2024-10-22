@@ -9,8 +9,8 @@ import { sum } from 'lodash';
 const LOCAL_STORAGE_CUSTOM_CURRENCY = 'custom-currency';
 
 const fromValuesSchema = z.object({
-  jpy: z.string().optional(),
-  thb: z.array(z.string().optional()),
+  thb: z.string().optional(),
+  jpy: z.array(z.string().optional()),
 });
 
 type FormSchema = z.infer<typeof fromValuesSchema>;
@@ -23,7 +23,7 @@ function useController() {
 
   const { currencyService } = useContext(ServiceContext);
   const [currency, setCurrency] = useState<string>(
-    getCustomCurrencyFromLocalStorage()?.jpy ?? '2'
+    getCustomCurrencyFromLocalStorage()?.jpy ?? '0'
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,23 +37,36 @@ function useController() {
     resolver: zodResolver(fromValuesSchema),
   });
 
-  const jpySummary = sum(watch('thb')) * (parseFloat(currency) / 100);
+  const thbSummary = (sum(watch('jpy')) * (parseFloat(currency) / 100)).toFixed(
+    0
+  );
 
   useEffect(() => {
-    setValue('jpy', jpySummary.toString());
+    setValue('thb', thbSummary.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jpySummary]);
+  }, [thbSummary]);
+
+  useEffect(() => {
+    setCustomCurrencyToLocalStorage({ jpy: currency });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
 
   const onClickSyncCurrency = () => {
     setIsLoading(true);
     currencyService
       .getThaiBahtJapaneseYenRate()
       .then((res) => {
-        setCurrency(res);
-        setCustomCurrencyToLocalStorage({ jpy: res });
+        const currencyWith3Digit = parseFloat(res).toFixed(3).toString();
+        setCurrency(currencyWith3Digit);
       })
       .finally(() => setIsLoading(false));
   };
+
+  const onClickUp = () =>
+    setCurrency((prev) => (parseFloat(prev) + 0.001).toFixed(3).toString());
+
+  const onClickDown = () =>
+    setCurrency((prev) => (parseFloat(prev) - 0.001).toFixed(3).toString());
 
   return {
     isLoading,
@@ -62,7 +75,9 @@ function useController() {
     watch,
     register,
     resetForm,
-    jpySummary,
+    thbSummary,
+    onClickUp,
+    onClickDown,
   };
 }
 

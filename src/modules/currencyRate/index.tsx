@@ -7,28 +7,28 @@ import NationFlag from '@components/NationFlag';
 import { TbMinus, TbPlus } from 'react-icons/tb';
 
 function CurrencyRate() {
-  const { isLoading, onClickSyncCurrency, currency, register } =
-    useController();
+  const {
+    isLoading,
+    onClickSyncCurrency,
+    currency,
+    register,
+    onClickUp,
+    onClickDown,
+  } = useController();
   return (
     <AppWithUserLayout>
       <div className="flex h-full w-full flex-col gap-6">
         <div className="px-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm">Rate: {parseFloat(currency).toFixed(2)}</p>
+            <p className="text-sm">Rate: {parseFloat(currency).toFixed(3)}</p>
             <div className="flex gap-3">
               <div className="flex gap-1">
                 <Button
                   size={SIZE.SMALL}
-                  onClick={onClickSyncCurrency}
-                  disabled={true}
+                  onClick={onClickDown}
                   icon={TbMinus}
                 />
-                <Button
-                  size={SIZE.SMALL}
-                  onClick={onClickSyncCurrency}
-                  disabled={true}
-                  icon={TbPlus}
-                />
+                <Button size={SIZE.SMALL} onClick={onClickUp} icon={TbPlus} />
               </div>
               <Button
                 size={SIZE.SMALL}
@@ -45,22 +45,7 @@ function CurrencyRate() {
             className="flex w-full flex-col justify-center"
           >
             <label htmlFor="title" className="label label-text-alt">
-              JPY Summary
-            </label>
-            <div className="relative">
-              <NationFlag
-                nation="japan"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-              />
-              <input
-                type="number"
-                className="input input-md input-bordered w-full"
-                {...register('jpy')}
-                readOnly
-              />
-            </div>
-            <label htmlFor="title" className="label label-text-alt">
-              THB list
+              THB Summary
             </label>
             <div className="relative">
               <NationFlag
@@ -70,7 +55,22 @@ function CurrencyRate() {
               <input
                 type="number"
                 className="input input-md input-bordered w-full"
-                {...register('thb.0')}
+                {...register('thb')}
+                readOnly
+              />
+            </div>
+            <label htmlFor="title" className="label label-text-alt">
+              JPY list
+            </label>
+            <div className="relative">
+              <NationFlag
+                nation="japan"
+                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-40"
+              />
+              <input
+                type="number"
+                className="input input-md input-bordered w-full"
+                {...register('jpy.0')}
                 autoFocus
                 autoComplete="off"
               />
