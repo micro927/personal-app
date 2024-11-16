@@ -183,3 +183,7 @@ export const injectSplittedList = (
     return currentItem;
   });
 };
+
+export const parseCurrencyFormat = (value: string | number) => {
+  return (typeof value === 'number' ? value : parseFloat(value)).toFixed(2);
+};

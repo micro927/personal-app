@@ -7,8 +7,6 @@ import { COLOR_NAME } from '@constants/colorName';
 
 function CurrencyRate() {
   const {
-    isLoading,
-    onClickSyncCurrency,
     currency,
     register,
     onClickGo,
@@ -17,13 +15,14 @@ function CurrencyRate() {
     onClickDown,
     onClickAddItem,
     onClickDeleteItem,
+    jpySummaryDisplay,
   } = useController();
   return (
     <div className="flex h-full w-full flex-col gap-6 p-2">
       <div className="fixed left-0 top-0 z-30 w-full bg-base-100">
         <div className="w-full p-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm">Rate: {parseFloat(currency).toFixed(3)}</p>
+            <p className="text-sm">Rate: {currency}</p>
             <div className="flex gap-3">
               <div className="flex gap-1">
                 <Button
@@ -33,16 +32,19 @@ function CurrencyRate() {
                 />
                 <Button size={SIZE.SMALL} onClick={onClickUp} icon={TbPlus} />
               </div>
-              <Button
+              {/* <Button
                 size={SIZE.SMALL}
                 onClick={onClickSyncCurrency}
                 disabled={isLoading}
               >
                 Sync
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="py-3">
+            <label className="label label-text-alt text-success">
+              {jpySummaryDisplay}
+            </label>
             <label htmlFor="title" className="label label-text-alt">
               THB Summary
             </label>
@@ -95,6 +97,7 @@ function CurrencyRate() {
                     autoFocus
                     autoComplete="off"
                     onKeyDown={onClickGo}
+                    onWheel={(e) => (e.target as HTMLElement).blur()}
                   />
                 </div>
               );

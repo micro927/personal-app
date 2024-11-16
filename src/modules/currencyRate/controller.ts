@@ -1,10 +1,11 @@
 import { ServiceContext } from '@components/ServiceProvider/context';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCurrencyFormat } from '@utils/data';
 import { useLocalStorageItem } from '@utils/useLocalStorageItem';
+import { sum } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { sum } from 'lodash';
 
 const LOCAL_STORAGE_CUSTOM_CURRENCY = 'custom-currency';
 
@@ -47,9 +48,15 @@ function useController() {
 
   const jpyWatchValues = watch('jpy');
 
-  const thbSummary =
-    sum((jpyWatchValues ?? []).map((val) => (val ? parseFloat(val) : 0))) *
-    (parseFloat(currency) / 100);
+  const jpySummary = sum(
+    (jpyWatchValues ?? []).map((val) => (val ? parseFloat(val) : 0))
+  );
+
+  const jpySummaryDisplay = `${jpySummary.toLocaleString('en-US', {
+    maximumFractionDigits: 0,
+  })} ¥`;
+
+  const thbSummary = jpySummary * (parseFloat(currency) / 100);
 
   useEffect(() => {
     setValue(
@@ -70,17 +77,17 @@ function useController() {
     currencyService
       .getThaiBahtJapaneseYenRate()
       .then((res) => {
-        const currencyWith3Digit = parseFloat(res).toFixed(3).toString();
-        setCurrency(currencyWith3Digit);
+        const currencyFormatted = parseCurrencyFormat(res);
+        setCurrency(currencyFormatted);
       })
       .finally(() => setIsLoading(false));
   };
 
   const onClickUp = () =>
-    setCurrency((prev) => (parseFloat(prev) + 0.001).toFixed(3).toString());
+    setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) + 0.01));
 
   const onClickDown = () =>
-    setCurrency((prev) => (parseFloat(prev) - 0.001).toFixed(3).toString());
+    setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) - 0.01));
 
   const onClickAddItem = () => {
     const newItems = [...watch('jpy'), ''];
@@ -109,6 +116,7 @@ function useController() {
     register,
     resetForm,
     thbSummary,
+    jpySummaryDisplay,
     items,
     onClickUp,
     onClickDown,
