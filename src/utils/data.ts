@@ -164,21 +164,31 @@ export const summaryCoupleDebtList = (
 
 export const injectSplittedList = (
   currentList: CoupleDebtSplitted[],
-  anotherList: CoupleDebtSplitted[] | null
+  comparingList: CoupleDebtSplitted[] | null
 ) => {
-  if (anotherList === null) return currentList;
+  if (comparingList === null) return currentList;
 
-  const idWithIndexInAnotherList: Record<number, number> = {};
-  anotherList.map(({ coupleDebtId }, index) => {
-    idWithIndexInAnotherList[coupleDebtId] = index;
+  const idWithIndexInComparingList: Record<number, number> = {};
+  comparingList.map(({ coupleDebtId }, index) => {
+    idWithIndexInComparingList[coupleDebtId] = index;
   });
 
   return currentList.map((currentItem) => {
-    const thisItemIndexInAnotherList =
-      idWithIndexInAnotherList?.[currentItem.coupleDebtId];
+    const thisItemIndexInComparingList =
+      idWithIndexInComparingList?.[currentItem.coupleDebtId];
 
-    if (typeof thisItemIndexInAnotherList === 'number') {
-      return anotherList[thisItemIndexInAnotherList];
+    if (typeof thisItemIndexInComparingList === 'number') {
+      const comparingItem = comparingList[thisItemIndexInComparingList];
+
+      const comparingAmount =
+        comparingItem[USER.FIRST].amount + comparingItem[USER.SECOND].amount;
+      const currentAmount =
+        currentItem[USER.FIRST].amount + currentItem[USER.SECOND].amount;
+
+      if (currentAmount === comparingAmount) {
+        return comparingItem;
+      }
+      return currentItem;
     }
     return currentItem;
   });
