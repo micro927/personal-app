@@ -180,18 +180,17 @@ export const injectSplittedList = (
     if (typeof thisItemIndexInComparingList === 'number') {
       const comparingItem = comparingList[thisItemIndexInComparingList];
 
-      const comparingAmount =
-        comparingItem[USER.FIRST].amount + comparingItem[USER.SECOND].amount;
-      const currentAmount =
+      const isTotalAmountChanged =
+        comparingItem[USER.FIRST].amount + comparingItem[USER.SECOND].amount !==
         currentItem[USER.FIRST].amount + currentItem[USER.SECOND].amount;
 
-      if (
-        currentAmount === comparingAmount &&
-        comparingItem[USER.FIRST].amount === currentItem[USER.FIRST].amount
-      ) {
-        return comparingItem;
+      const isPayerChanged =
+        comparingItem[USER.FIRST].isPayer !== currentItem[USER.FIRST].isPayer;
+
+      if (isTotalAmountChanged || isPayerChanged) {
+        return currentItem;
       }
-      return currentItem;
+      return comparingItem;
     }
     return currentItem;
   });
