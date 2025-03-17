@@ -185,7 +185,10 @@ export const injectSplittedList = (
       const currentAmount =
         currentItem[USER.FIRST].amount + currentItem[USER.SECOND].amount;
 
-      if (currentAmount === comparingAmount) {
+      if (
+        currentAmount === comparingAmount &&
+        comparingItem[USER.FIRST].amount === currentItem[USER.FIRST].amount
+      ) {
         return comparingItem;
       }
       return currentItem;
