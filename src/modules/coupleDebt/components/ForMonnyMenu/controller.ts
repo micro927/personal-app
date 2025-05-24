@@ -18,7 +18,7 @@ function useController() {
     useState(false);
 
   const getIndividualExpense = (silent = false) => {
-    !silent && setIsLoading(true);
+    if(!silent) setIsLoading(true);
     individualExpenseService
       .getExpense(user.id)
       .then(({ data }) => {

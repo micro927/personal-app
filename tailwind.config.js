@@ -1,6 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-import daisyui from 'daisyui';
-import theme from 'daisyui/src/theming/themes';
 
 export default {
   content: [
@@ -23,14 +21,5 @@ export default {
         translateYAndFadeIn: 'translateYAndFadeIn 0.1s ease-in-out',
       },
     },
-  },
-  plugins: [daisyui],
-  daisyui: {
-    themes: [
-      {
-        light: theme['emerald'], //NOTE: custom light theme here
-        dark: theme['dim'], //NOTE: custom dark theme here
-      },
-    ],
   },
 };

@@ -42,16 +42,18 @@ function CurrencyRate() {
             </div>
           </div>
           <div className="py-3">
-            <label className="label label-text-alt text-success">
-              {jpySummaryDisplay}
-            </label>
+            <div className="py-3">
+              <label className="label label-text-alt text-success">
+                {jpySummaryDisplay}
+              </label>
+            </div>
             <label htmlFor="title" className="label label-text-alt">
               THB Summary
             </label>
             <div className="relative">
               <NationFlag
                 nation="thailand"
-                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-40"
+                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-40 z-40"
               />
               <input
                 type="text"
@@ -69,14 +71,14 @@ function CurrencyRate() {
         className="flex w-full flex-col justify-center pt-[170px]"
       >
         <div className="px-2">
-          <label htmlFor="title" className="label label-text-alt">
+          <label htmlFor="title" className="label label-text-alt block">
             JPY list
           </label>
           <div className="flex flex-col gap-2">
             {items.map((_, index) => {
               return (
                 <div key={index} className="relative">
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-40">
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-40 z-40">
                     {index === 0 ? (
                       <NationFlag nation="japan" />
                     ) : (

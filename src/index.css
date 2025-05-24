@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: emerald --default, dim --prefersdark
+}
 
 :root {
   font-family: 'Prompt', sans-serif;
