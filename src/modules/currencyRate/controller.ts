@@ -1,4 +1,5 @@
 import { ServiceContext } from '@components/ServiceProvider/context';
+import { FIXED_JPY } from '@constants/microApp';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCurrencyFormat } from '@utils/data';
 import { useLocalStorageItem } from '@utils/useLocalStorageItem';
@@ -71,6 +72,10 @@ function useController() {
     setCustomCurrencyToLocalStorage({ jpy: currency, items });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency, thbSummary]);
+
+  useEffect(() => {
+    setCurrency(parseCurrencyFormat(FIXED_JPY));
+  }, []);
 
   const onClickSyncCurrency = () => {
     setIsLoading(true);
