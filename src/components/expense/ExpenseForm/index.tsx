@@ -99,6 +99,7 @@ function ExpenseFormModal({
             Paid date
           </label>
           <DatePickerInput
+            key={`datepicker-${defaultPaidAtDate}`}
             defaultDate={defaultPaidAtDate}
             setValueFunction={setPaidAt}
           />

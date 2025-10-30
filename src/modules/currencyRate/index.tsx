@@ -11,8 +11,11 @@ function CurrencyRate() {
     register,
     onClickGo,
     items,
-    onClickUp,
-    onClickDown,
+    onTouchCurrency,
+    onLeaveCurrency,
+    onTouchUpButton,
+    onTouchDownButton,
+    onLeaveButton,
     onClickAddItem,
     onClickDeleteItem,
     jpySummaryDisplay,
@@ -22,15 +25,36 @@ function CurrencyRate() {
       <div className="fixed left-0 top-0 z-30 w-full bg-base-100">
         <div className="w-full p-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm">Rate: {currency}</p>
+            <p
+              className="cursor-pointer select-none text-sm"
+              onTouchStart={onTouchCurrency}
+              onTouchEnd={onLeaveCurrency}
+              onMouseDown={onTouchCurrency}
+              onMouseUp={onLeaveCurrency}
+              onMouseLeave={onLeaveCurrency}
+            >
+              Rate: {currency}
+            </p>
             <div className="flex gap-3">
               <div className="flex gap-1">
                 <Button
                   size={SIZE.SMALL}
-                  onClick={onClickDown}
+                  onTouchStart={onTouchDownButton}
+                  onTouchEnd={onLeaveButton}
+                  onMouseDown={onTouchDownButton}
+                  onMouseUp={onLeaveButton}
+                  onMouseLeave={onLeaveButton}
                   icon={TbMinus}
                 />
-                <Button size={SIZE.SMALL} onClick={onClickUp} icon={TbPlus} />
+                <Button
+                  size={SIZE.SMALL}
+                  onTouchStart={onTouchUpButton}
+                  onTouchEnd={onLeaveButton}
+                  onMouseDown={onTouchUpButton}
+                  onMouseUp={onLeaveButton}
+                  onMouseLeave={onLeaveButton}
+                  icon={TbPlus}
+                />
               </div>
               {/* <Button
                 size={SIZE.SMALL}

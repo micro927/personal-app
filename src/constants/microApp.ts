@@ -38,4 +38,4 @@ export enum COUPLE_DEBT_MENU_KEY {
   FOR_MONNY = 'for-monny',
 }
 
-export const FIXED_JPY = '22.73';
+export const FIXED_JPY = '21.50';

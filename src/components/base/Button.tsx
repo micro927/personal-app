@@ -23,14 +23,21 @@ function Button(
     isLoading?: boolean;
   }
 ) {
-  const size = props?.size ?? SIZE.MEDIUM;
-  const color = props?.color ? buttonColorMapper[props.color] : '';
-  const outline = props?.outline ? 'btn-outline' : '';
-  const link = props?.link ? 'btn-link' : '';
-  const shape = props?.shape ?? false;
-  const Icon = props?.icon ? props.icon : () => <></>;
-  const iconSize = props?.iconSize ?? buttonIconSizeMapper[size];
-  const isLoading = props?.isLoading ?? false;
+  const {
+    isLoading = false,
+    size = SIZE.MEDIUM,
+    shape = false,
+    icon: Icon = () => <></>,
+    iconSize = buttonIconSizeMapper[size],
+    color: colorName,
+    outline: hasOutline,
+    link: hasLink,
+    ...defaultProps
+  } = props;
+
+  const color = colorName ? buttonColorMapper[colorName] : '';
+  const outline = hasOutline ? 'btn-outline' : '';
+  const link = hasLink ? 'btn-link' : '';
 
   return (
     <button
@@ -44,10 +51,8 @@ function Button(
         shape === BUTTON_SHAPE.CIRCLE && 'btn-circle',
         props.className
       )}
-      type={props?.type}
-      onClick={props.onClick}
       disabled={props.disabled || props.isLoading}
-      tabIndex={props?.tabIndex}
+      {...defaultProps}
     >
       {isLoading ? (
         <span className="loading loading-spinner" />
