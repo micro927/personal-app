@@ -1,5 +1,6 @@
 import type { Timeout } from '#types/utils';
 import { ServiceContext } from '@components/ServiceProvider/context';
+import { BUTTON_TIMEOUT } from '@constants/button';
 import { FIXED_JPY } from '@constants/microApp';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCurrencyFormat } from '@utils/data';
@@ -11,12 +12,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const LOCAL_STORAGE_CUSTOM_CURRENCY = 'custom-currency';
-
-enum TIMEOUT {
-  CURRENCY_VALUE_INTERVAL = 100,
-  CURRENCY_VALUE_TRIGGER = 700,
-  RESET_CURRENCY = 2000,
-}
 
 const fromValuesSchema = z.object({
   thb: z.string().optional(),
@@ -42,7 +37,6 @@ function useController() {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const touchButtonInterval = useRef<Timeout | null>();
   const resetCurrencyTimer = useRef<Timeout | null>();
 
   const {
@@ -109,7 +103,7 @@ function useController() {
       setCurrency(parseCurrencyFormat(FIXED_JPY));
       if (resetCurrencyTimer.current) clearTimeout(resetCurrencyTimer.current);
       resetCurrencyTimer.current = null;
-    }, TIMEOUT.RESET_CURRENCY);
+    }, BUTTON_TIMEOUT.HOLD_TRIGGER);
   };
 
   const onLeaveCurrency = () => {
@@ -117,31 +111,11 @@ function useController() {
     resetCurrencyTimer.current = null;
   };
 
-  const onTouchUpButton = () => {
+  const onClickUp = () =>
     setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) + 0.01));
 
-    touchButtonInterval.current = setTimeout(() => {
-      touchButtonInterval.current = setInterval(() => {
-        setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) + 0.01));
-      }, TIMEOUT.CURRENCY_VALUE_INTERVAL);
-    }, TIMEOUT.CURRENCY_VALUE_TRIGGER);
-  };
-
-  const onTouchDownButton = () => {
+  const onClickDown = () =>
     setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) - 0.01));
-
-    touchButtonInterval.current = setTimeout(() => {
-      touchButtonInterval.current = setInterval(() => {
-        setCurrency((prev) => parseCurrencyFormat(parseFloat(prev) - 0.01));
-      }, TIMEOUT.CURRENCY_VALUE_INTERVAL);
-    }, TIMEOUT.CURRENCY_VALUE_TRIGGER);
-  };
-
-  const onLeaveButton = () => {
-    if (touchButtonInterval.current) clearInterval(touchButtonInterval.current);
-    touchButtonInterval.current = null;
-    console.log('====clear');
-  };
 
   const onClickAddItem = () => {
     const newItems = [...watch('jpy'), ''];
@@ -174,9 +148,8 @@ function useController() {
     items,
     onTouchCurrency,
     onLeaveCurrency,
-    onTouchUpButton,
-    onTouchDownButton,
-    onLeaveButton,
+    onClickUp,
+    onClickDown,
     onClickAddItem,
     onClickDeleteItem,
     onClickGo,

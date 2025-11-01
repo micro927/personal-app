@@ -1,4 +1,5 @@
-import { BUTTON_SHAPE } from '@constants/button';
+import type { ClickOrTouchHandler, Timeout } from '#types/utils';
+import { BUTTON_SHAPE, BUTTON_TIMEOUT } from '@constants/button';
 import { COLOR_NAME } from '@constants/colorName';
 import { SIZE } from '@constants/size';
 import { cx } from '@emotion/css';
@@ -7,6 +8,7 @@ import {
   buttonIconSizeMapper,
   buttonSizeMapper,
 } from '@utils/uiClassMapper';
+import { useMemo, useRef } from 'react';
 import type { IconType } from 'react-icons';
 
 function Button(
@@ -21,19 +23,64 @@ function Button(
     iconEnd?: boolean;
     iconClassName?: string;
     isLoading?: boolean;
+    continuos?: boolean;
   }
 ) {
   const {
-    isLoading = false,
+    disabled = false,
+    children,
+    className,
     size = SIZE.MEDIUM,
     shape = false,
-    icon: Icon = () => <></>,
-    iconSize = buttonIconSizeMapper[size],
     color: colorName,
     outline: hasOutline,
     link: hasLink,
+    icon: Icon = () => <></>,
+    iconSize = buttonIconSizeMapper[size],
+    iconEnd = false,
+    iconClassName = '',
+    isLoading = false,
+    continuos = false,
     ...defaultProps
   } = props;
+
+  const continuosIntervalRef = useRef<Timeout | null>();
+
+  const continuosProps = useMemo(() => {
+    const action = defaultProps.onClick as (
+      e: React.SyntheticEvent<HTMLButtonElement>
+    ) => void;
+
+    if (continuos && action) {
+      const onTouchStart: ClickOrTouchHandler<HTMLButtonElement> = (e) => {
+        action(e);
+
+        continuosIntervalRef.current = setTimeout(() => {
+          continuosIntervalRef.current = setInterval(() => {
+            action(e);
+          }, BUTTON_TIMEOUT.CONTINUOUS_INTERVAL);
+        }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
+      };
+
+      const onTouchEnd: ClickOrTouchHandler<HTMLButtonElement> = () => {
+        if (continuosIntervalRef.current) {
+          clearInterval(continuosIntervalRef.current);
+        }
+        continuosIntervalRef.current = null;
+      };
+
+      return {
+        onTouchStart,
+        onTouchEnd,
+        // onMouseDown: onTouchStart,
+        // onMouseUp: onTouchEnd,
+        // onMouseLeave: onTouchEnd,
+        onClick: undefined,
+      };
+    } else {
+      return {};
+    }
+  }, [continuos, defaultProps.onClick]);
 
   const color = colorName ? buttonColorMapper[colorName] : '';
   const outline = hasOutline ? 'btn-outline' : '';
@@ -41,6 +88,7 @@ function Button(
 
   return (
     <button
+      {...defaultProps}
       className={cx(
         `btn flex flex-nowrap items-center justify-center gap-2`,
         buttonSizeMapper[size],
@@ -49,24 +97,24 @@ function Button(
         link,
         shape === BUTTON_SHAPE.SQUARE && 'btn-square',
         shape === BUTTON_SHAPE.CIRCLE && 'btn-circle',
-        props.className
+        className
       )}
-      disabled={props.disabled || props.isLoading}
-      {...defaultProps}
+      disabled={disabled || isLoading}
+      {...continuosProps}
     >
       {isLoading ? (
         <span className="loading loading-spinner" />
       ) : (
         <>
-          {props.iconEnd ? (
+          {iconEnd ? (
             <>
-              {props.children}
-              <Icon size={iconSize} className={props.iconClassName} />
+              {children}
+              <Icon size={iconSize} className={iconClassName} />
             </>
           ) : (
             <>
-              <Icon size={iconSize} className={props.iconClassName} />
-              {props.children}
+              <Icon size={iconSize} className={iconClassName} />
+              {children}
             </>
           )}
         </>

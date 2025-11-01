@@ -29,7 +29,6 @@ function Login() {
             )}
             <div className="card-actions">
               <Button
-                form="loginForm"
                 type="submit"
                 isLoading={isLoading}
                 disabled={!isValid}

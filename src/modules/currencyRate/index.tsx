@@ -13,9 +13,8 @@ function CurrencyRate() {
     items,
     onTouchCurrency,
     onLeaveCurrency,
-    onTouchUpButton,
-    onTouchDownButton,
-    onLeaveButton,
+    onClickUp,
+    onClickDown,
     onClickAddItem,
     onClickDeleteItem,
     jpySummaryDisplay,
@@ -26,12 +25,9 @@ function CurrencyRate() {
         <div className="w-full p-4">
           <div className="flex items-center justify-between">
             <p
-              className="cursor-pointer select-none text-sm"
+              className="cursor-pointer select-none py-4 text-sm"
               onTouchStart={onTouchCurrency}
               onTouchEnd={onLeaveCurrency}
-              onMouseDown={onTouchCurrency}
-              onMouseUp={onLeaveCurrency}
-              onMouseLeave={onLeaveCurrency}
             >
               Rate: {currency}
             </p>
@@ -39,21 +35,15 @@ function CurrencyRate() {
               <div className="flex gap-1">
                 <Button
                   size={SIZE.SMALL}
-                  onTouchStart={onTouchDownButton}
-                  onTouchEnd={onLeaveButton}
-                  onMouseDown={onTouchDownButton}
-                  onMouseUp={onLeaveButton}
-                  onMouseLeave={onLeaveButton}
+                  onClick={onClickDown}
                   icon={TbMinus}
+                  continuos
                 />
                 <Button
                   size={SIZE.SMALL}
-                  onTouchStart={onTouchUpButton}
-                  onTouchEnd={onLeaveButton}
-                  onMouseDown={onTouchUpButton}
-                  onMouseUp={onLeaveButton}
-                  onMouseLeave={onLeaveButton}
+                  onClick={onClickUp}
                   icon={TbPlus}
+                  continuos
                 />
               </div>
               {/* <Button
@@ -90,7 +80,7 @@ function CurrencyRate() {
       <form
         name="currencyForm"
         noValidate
-        className="flex w-full flex-col justify-center pt-[170px]"
+        className="flex w-full flex-col justify-center pt-[188px]"
       >
         <div className="px-2">
           <label htmlFor="title" className="label label-text-alt">
