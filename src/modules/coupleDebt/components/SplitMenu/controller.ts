@@ -1,7 +1,11 @@
 import { MainLayoutOutletContext } from '#types/component';
 import type { CoupleDebtSplitted } from '#types/data';
 import { ServiceContext } from '@components/ServiceProvider/context';
-import { USER } from '@constants/microApp';
+import {
+  SPLIT_SHIFT_AMOUNT_DEFAULT,
+  SPLIT_SHIFT_AMOUNT_MAXIMUM,
+  USER,
+} from '@constants/microApp';
 import {
   injectSplittedList,
   shiftAmount,
@@ -13,10 +17,18 @@ import { getScreenShot } from '@utils/screenShot';
 import type { CoupleDebt } from '@services';
 import { useLocalStorageItem } from '@utils/useLocalStorageItem';
 import { useModal } from '@utils/useModal';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 const LOCAL_STORAGE_SPLITTED_LIST = 'splitted-list';
+const LOCAL_STORAGE_SPLIT_SHIFT_AMOUNT = 'splitted-shift-amount';
 
 function useController({
   coupleDebtList,
@@ -31,22 +43,39 @@ function useController({
     remove: clearSplittedListLocalStorage,
   } = useLocalStorageItem<CoupleDebtSplitted[]>(LOCAL_STORAGE_SPLITTED_LIST);
 
+  const {
+    get: getShiftAmountFromLocalStorage,
+    set: setShiftAmountToLocalStorage,
+  } = useLocalStorageItem<{ amount: number }>(LOCAL_STORAGE_SPLIT_SHIFT_AMOUNT);
+
   const [isLoading, setIsLoading] = useState(false);
   const screenRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
+  const shiftAmountInputRef = useRef<HTMLInputElement>(null);
+
   const { coupleDebtService, individualExpenseService } =
     useContext(ServiceContext);
   const { showAlert } = useOutletContext<MainLayoutOutletContext>();
   const [coupleDebtSplittedList, setCoupleDebtSplittedList] = useState(
     splitCoupleDebtList(coupleDebtList)
   );
+  const [shiftAmountNumber, setShiftAmountNumber] = useState(
+    SPLIT_SHIFT_AMOUNT_DEFAULT
+  );
+
   const [isShowSummary, setIsShowSummary] = useState(false);
 
   const {
     modalRef: confirmModalRef,
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
-    isOpenModal: isOpenConfirmModal,
+  } = useModal();
+
+  const {
+    modalRef: updateShiftAmountModalRef,
+    openModal: openUpdateShiftAmountModal,
+    closeModal: closeUpdateShiftAmountModal,
+    isOpenModal: isOpenUpdateShiftAmountModal,
   } = useModal();
 
   const updateCoupleDebtSplitted = (
@@ -74,18 +103,26 @@ function useController({
 
   const increaseFirstAmount = useCallback(
     (coupleDebtId: number, amountPair: [number, number]) => {
-      const newAmountPair = shiftAmount(amountPair, USER.FIRST, 5);
+      const newAmountPair = shiftAmount(
+        amountPair,
+        USER.FIRST,
+        shiftAmountNumber
+      );
       updateCoupleDebtSplitted(coupleDebtId, newAmountPair);
     },
-    []
+    [shiftAmountNumber]
   );
 
   const increaseSecondAmount = useCallback(
     (coupleDebtId: number, amountPair: [number, number]) => {
-      const newAmountPair = shiftAmount(amountPair, USER.SECOND, 5);
+      const newAmountPair = shiftAmount(
+        amountPair,
+        USER.SECOND,
+        shiftAmountNumber
+      );
       updateCoupleDebtSplitted(coupleDebtId, newAmountPair);
     },
-    []
+    [shiftAmountNumber]
   );
 
   const summary = useMemo(
@@ -153,6 +190,43 @@ function useController({
       });
   };
 
+  const loadShiftAmountFromLocalStorage = () => {
+    const shiftAmountLocalStorage = getShiftAmountFromLocalStorage();
+    if (shiftAmountLocalStorage?.amount) {
+      setShiftAmountNumber(shiftAmountLocalStorage.amount);
+    }
+  };
+
+  const saveShiftAmountToLocalStorage = (n: number) => {
+    setShiftAmountToLocalStorage({ amount: n });
+  };
+
+  const submitNewShiftAmountNumber = () => {
+    if (shiftAmountInputRef.current) {
+      const newNumber = Math.min(
+        SPLIT_SHIFT_AMOUNT_MAXIMUM,
+        Math.max(
+          SPLIT_SHIFT_AMOUNT_DEFAULT,
+          parseInt(shiftAmountInputRef.current.value || '0')
+        )
+      );
+      setShiftAmountNumber(newNumber);
+      saveShiftAmountToLocalStorage(newNumber);
+      closeUpdateShiftAmountModal();
+    }
+  };
+
+  useEffect(() => {
+    loadShiftAmountFromLocalStorage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isOpenUpdateShiftAmountModal && shiftAmountInputRef.current) {
+      shiftAmountInputRef.current.value = `${shiftAmountNumber}`;
+    }
+  }, [isOpenUpdateShiftAmountModal, shiftAmountNumber]);
+
   return {
     coupleDebtSplittedList,
     increaseFirstAmount,
@@ -169,9 +243,14 @@ function useController({
     confirmModalRef,
     openConfirmModal,
     closeConfirmModal,
-    isOpenConfirmModal,
     saveToLocalStorage,
     loadFromLocalStorage,
+    shiftAmountNumber,
+    shiftAmountInputRef,
+    updateShiftAmountModalRef,
+    openUpdateShiftAmountModal,
+    closeUpdateShiftAmountModal,
+    submitNewShiftAmountNumber,
   };
 }
 

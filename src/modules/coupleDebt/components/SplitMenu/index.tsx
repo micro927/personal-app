@@ -14,11 +14,17 @@ import {
   TbCircleCheck,
   TbDownload,
   TbFileUpload,
+  TbMessage2Plus,
 } from 'react-icons/tb';
 import Button from '@components/base/Button';
 import { BUTTON_SHAPE } from '@constants/button';
 import { SIZE } from '@constants/size';
-import { USER, userAvatar } from '@constants/microApp';
+import {
+  SPLIT_SHIFT_AMOUNT_DEFAULT,
+  SPLIT_SHIFT_AMOUNT_MAXIMUM,
+  USER,
+  userAvatar,
+} from '@constants/microApp';
 import { COLOR_NAME } from '@constants/colorName';
 import Modal from '@components/base/Modal';
 
@@ -49,6 +55,12 @@ function SplitMenu({
     closeConfirmModal,
     saveToLocalStorage,
     loadFromLocalStorage,
+    shiftAmountNumber,
+    shiftAmountInputRef,
+    updateShiftAmountModalRef,
+    openUpdateShiftAmountModal,
+    closeUpdateShiftAmountModal,
+    submitNewShiftAmountNumber,
   } = useController({ coupleDebtList, onDataUpdate });
   return (
     <>
@@ -71,7 +83,12 @@ function SplitMenu({
                   <th className="w-1/6 text-accent first-letter:uppercase">
                     {USER.SECOND}
                   </th>
-                  <th className="w-full text-center">Increase (+5)</th>
+                  <th
+                    className="w-full text-center"
+                    onClick={openUpdateShiftAmountModal}
+                  >
+                    Increase +{shiftAmountNumber}
+                  </th>
                 </tr>
               </thead>
               {isMainLoading ? (
@@ -339,6 +356,38 @@ function SplitMenu({
               onClick={() => completeCoupleDebtList(coupleDebtSplittedList)}
             >
               Mark as Completed
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        modalRef={updateShiftAmountModalRef}
+        modalId="update-shift-amount-modal"
+        closeModal={closeUpdateShiftAmountModal}
+      >
+        <div className="flex w-full flex-col justify-center">
+          <div className="mb-2 flex w-full flex-col gap-3">
+            <label htmlFor="shift-amount" className="label label-text-alt">
+              New Shift Amount
+            </label>
+            <input
+              id="shift-amount"
+              ref={shiftAmountInputRef}
+              type="number"
+              className="input input-md input-bordered w-full"
+              min={SPLIT_SHIFT_AMOUNT_DEFAULT}
+              max={SPLIT_SHIFT_AMOUNT_MAXIMUM}
+            />
+          </div>
+          <div className="modal-action justify-between">
+            <Button onClick={closeUpdateShiftAmountModal}>Close</Button>
+            <Button
+              type="button"
+              color={COLOR_NAME.SECONDARY}
+              className="px-10"
+              onClick={submitNewShiftAmountNumber}
+            >
+              <TbMessage2Plus /> Save
             </Button>
           </div>
         </div>
