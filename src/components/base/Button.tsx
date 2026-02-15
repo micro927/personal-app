@@ -47,11 +47,11 @@ function Button(
   const continuosDelayRef = useRef<number | null>(null);
 
   const clearTimers = () => {
-    if (continuosDelayRef.current) {
+    if (continuosDelayRef.current !== null) {
       clearTimeout(continuosDelayRef.current);
     }
 
-    if (continuosIntervalRef.current) {
+    if (continuosIntervalRef.current !== null) {
       clearInterval(continuosIntervalRef.current);
     }
 
@@ -60,19 +60,21 @@ function Button(
   };
 
   const continuosProps = useMemo(() => {
-    const action = defaultProps.onClick as (
-      e: React.SyntheticEvent<HTMLButtonElement>
-    ) => void;
+    const action = defaultProps.onClick;
 
     if (!continuos || !action) return {};
 
-    const start = (e: React.SyntheticEvent<HTMLButtonElement>) => {
-      action(e);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fire = () => action(undefined as any);
+
+    const start = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      action(e); // real click once
 
       continuosDelayRef.current = window.setTimeout(() => {
-        continuosIntervalRef.current = window.setInterval(() => {
-          action(e);
-        }, BUTTON_TIMEOUT.CONTINUOUS_INTERVAL);
+        continuosIntervalRef.current = window.setInterval(
+          fire,
+          BUTTON_TIMEOUT.CONTINUOUS_INTERVAL
+        );
       }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
     };
 
