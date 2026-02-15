@@ -71,9 +71,9 @@ function Button(
       return {
         onTouchStart,
         onTouchEnd,
-        onMouseDown: onTouchStart,
-        onMouseUp: onTouchEnd,
-        onMouseLeave: onTouchEnd,
+        // onMouseDown: onTouchStart,
+        // onMouseUp: onTouchEnd,
+        // onMouseLeave: onTouchEnd,
         onClick: undefined,
         style: {
           WebkitTouchCallout:
