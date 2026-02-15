@@ -27,7 +27,7 @@
       "label": "Narrow Example screen"
     }
   ],
-  "start_url": "/public/currency-rate",
-  "scope": "/public/",
+  "start_url": "./public/currency-rate",
+  "scope": "./public/",
   "display": "standalone"
 }
