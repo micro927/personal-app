@@ -27,7 +27,7 @@
       "label": "Narrow Example screen"
     }
   ],
-  "start_url": "/public/",
+  "start_url": "/public/currency",
   "scope": "/public/",
   "display": "standalone"
 }
