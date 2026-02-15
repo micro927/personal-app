@@ -27,6 +27,7 @@
       "label": "Narrow Example screen"
     }
   ],
-  "start_url": "./",
+  "start_url": "/public/",
+  "scope": "/public/",
   "display": "standalone"
 }
