@@ -7,6 +7,6 @@ export enum ROUTE {
 }
 
 export enum ROUTE_PUBLIC {
-  HOME = '/public',
+  HOME = '/shared',
   CURRENCY_RATE = 'currency-rate',
 }

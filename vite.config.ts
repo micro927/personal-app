@@ -8,7 +8,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        public: resolve(__dirname, 'public.html'),
+        public: resolve(__dirname, 'shared.html'),
       },
     },
   },
@@ -20,8 +20,8 @@ export default defineConfig({
         server.middlewares.use((req, res, next) => {
           if (!req.url) return next();
 
-          if (req.url.startsWith('/public')) {
-            req.url = '/public.html';
+          if (req.url.startsWith('/shared')) {
+            req.url = '/shared.html';
           }
 
           next();

@@ -1,3 +1,4 @@
+import type { ClickOrTouchHandler, Timeout } from '#types/utils';
 import { BUTTON_SHAPE, BUTTON_TIMEOUT } from '@constants/button';
 import { COLOR_NAME } from '@constants/colorName';
 import { SIZE } from '@constants/size';
@@ -43,50 +44,48 @@ function Button(
     ...defaultProps
   } = props;
 
-  const continuosIntervalRef = useRef<number | null>(null);
-  const continuosDelayRef = useRef<number | null>(null);
-
-  const clearTimers = () => {
-    if (continuosDelayRef.current !== null) {
-      clearTimeout(continuosDelayRef.current);
-    }
-
-    if (continuosIntervalRef.current !== null) {
-      clearInterval(continuosIntervalRef.current);
-    }
-
-    continuosDelayRef.current = null;
-    continuosIntervalRef.current = null;
-  };
+  const continuosIntervalRef = useRef<Timeout | null>();
 
   const continuosProps = useMemo(() => {
-    const action = defaultProps.onClick;
+    const action = defaultProps.onClick as (
+      e: React.SyntheticEvent<HTMLButtonElement>
+    ) => void;
+    if (continuos && action) {
+      const onTouchStart: ClickOrTouchHandler<HTMLButtonElement> = (e) => {
+        action(e);
 
-    if (!continuos || !action) return {};
+        continuosIntervalRef.current = setTimeout(() => {
+          continuosIntervalRef.current = setInterval(() => {
+            action(e);
+          }, BUTTON_TIMEOUT.CONTINUOUS_INTERVAL);
+        }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
+      };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fire = () => action(undefined as any);
+      const onTouchEnd: ClickOrTouchHandler<HTMLButtonElement> = () => {
+        if (continuosIntervalRef.current) {
+          clearInterval(continuosIntervalRef.current);
+        }
+        continuosIntervalRef.current = null;
+      };
 
-    const start = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      action(e); // real click once
-
-      continuosDelayRef.current = window.setTimeout(() => {
-        continuosIntervalRef.current = window.setInterval(
-          fire,
-          BUTTON_TIMEOUT.CONTINUOUS_INTERVAL
-        );
-      }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
-    };
-
-    return {
-      onPointerDown: start,
-      onPointerUp: clearTimers,
-      onPointerLeave: clearTimers,
-      onPointerCancel: clearTimers,
-      onContextMenu: clearTimers,
-      onBlur: clearTimers,
-      onClick: undefined,
-    };
+      return {
+        onTouchStart,
+        onTouchEnd,
+        onMouseDown: onTouchStart,
+        onMouseUp: onTouchEnd,
+        onMouseLeave: onTouchEnd,
+        onClick: undefined,
+        style: {
+          WebkitTouchCallout:
+            'none' as React.CSSProperties['WebkitTouchCallout'],
+          WebkitUserSelect: 'none' as React.CSSProperties['WebkitUserSelect'],
+          userSelect: 'none' as React.CSSProperties['userSelect'],
+          touchAction: 'manipulation',
+        },
+      };
+    } else {
+      return {};
+    }
   }, [continuos, defaultProps.onClick]);
 
   const color = colorName ? buttonColorMapper[colorName] : '';
