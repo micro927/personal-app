@@ -20,8 +20,8 @@ function CurrencyRate() {
     jpySummaryDisplay,
   } = useController();
   return (
-    <div className="flex h-full w-full flex-col gap-6 p-2">
-      <div className="fixed left-0 top-0 z-30 w-full bg-base-100">
+    <div id="currency-rate" className="flex h-full w-full flex-col gap-6 p-2">
+      <div className="fixed left-0 top-0 z-30 h-currency-thb-section w-full bg-base-100">
         <div className="w-full p-4">
           <div className="flex items-center justify-between">
             <p
@@ -80,7 +80,7 @@ function CurrencyRate() {
       <form
         name="currencyForm"
         noValidate
-        className="flex w-full flex-col justify-center pt-[188px]"
+        className="mt-currency-thb-section flex w-full flex-col justify-center"
       >
         <div className="px-2">
           <label htmlFor="title" className="label label-text-alt">

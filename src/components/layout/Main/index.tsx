@@ -6,7 +6,7 @@ function MainLayout() {
   const { outletContext, isShowAlert, alertProps } = useController();
   return (
     <>
-      <div className="flex min-h-screen w-screen">
+      <div className="flex min-h-[100svh] w-screen">
         <div className="flex w-full flex-1 flex-col">
           <Outlet context={outletContext} />
         </div>

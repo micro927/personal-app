@@ -2,6 +2,12 @@
 import daisyui from 'daisyui';
 import theme from 'daisyui/src/theming/themes';
 
+const elementSize = {
+  currencyRate: {
+    fixedThbSectionHeight: '220px',
+  },
+};
+
 export default {
   content: [
     './index.html',
@@ -10,6 +16,9 @@ export default {
   ],
   theme: {
     extend: {
+      spacing: {
+        'currency-thb-section': elementSize.currencyRate.fixedThbSectionHeight,
+      },
       keyframes: {
         translateYAndFadeIn: {
           '0%': { transform: 'translateY(-8px)', opacity: '0.6' },

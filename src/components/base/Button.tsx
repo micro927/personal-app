@@ -1,4 +1,3 @@
-import type { ClickOrTouchHandler, Timeout } from '#types/utils';
 import { BUTTON_SHAPE, BUTTON_TIMEOUT } from '@constants/button';
 import { COLOR_NAME } from '@constants/colorName';
 import { SIZE } from '@constants/size';
@@ -44,42 +43,48 @@ function Button(
     ...defaultProps
   } = props;
 
-  const continuosIntervalRef = useRef<Timeout | null>();
+  const continuosIntervalRef = useRef<number | null>(null);
+  const continuosDelayRef = useRef<number | null>(null);
+
+  const clearTimers = () => {
+    if (continuosDelayRef.current) {
+      clearTimeout(continuosDelayRef.current);
+    }
+
+    if (continuosIntervalRef.current) {
+      clearInterval(continuosIntervalRef.current);
+    }
+
+    continuosDelayRef.current = null;
+    continuosIntervalRef.current = null;
+  };
 
   const continuosProps = useMemo(() => {
     const action = defaultProps.onClick as (
       e: React.SyntheticEvent<HTMLButtonElement>
     ) => void;
 
-    if (continuos && action) {
-      const onTouchStart: ClickOrTouchHandler<HTMLButtonElement> = (e) => {
-        action(e);
+    if (!continuos || !action) return {};
 
-        continuosIntervalRef.current = setTimeout(() => {
-          continuosIntervalRef.current = setInterval(() => {
-            action(e);
-          }, BUTTON_TIMEOUT.CONTINUOUS_INTERVAL);
-        }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
-      };
+    const start = (e: React.SyntheticEvent<HTMLButtonElement>) => {
+      action(e);
 
-      const onTouchEnd: ClickOrTouchHandler<HTMLButtonElement> = () => {
-        if (continuosIntervalRef.current) {
-          clearInterval(continuosIntervalRef.current);
-        }
-        continuosIntervalRef.current = null;
-      };
+      continuosDelayRef.current = window.setTimeout(() => {
+        continuosIntervalRef.current = window.setInterval(() => {
+          action(e);
+        }, BUTTON_TIMEOUT.CONTINUOUS_INTERVAL);
+      }, BUTTON_TIMEOUT.CONTINUOUS_TRIGGER);
+    };
 
-      return {
-        onTouchStart,
-        onTouchEnd,
-        // onMouseDown: onTouchStart,
-        // onMouseUp: onTouchEnd,
-        // onMouseLeave: onTouchEnd,
-        onClick: undefined,
-      };
-    } else {
-      return {};
-    }
+    return {
+      onPointerDown: start,
+      onPointerUp: clearTimers,
+      onPointerLeave: clearTimers,
+      onPointerCancel: clearTimers,
+      onContextMenu: clearTimers,
+      onBlur: clearTimers,
+      onClick: undefined,
+    };
   }, [continuos, defaultProps.onClick]);
 
   const color = colorName ? buttonColorMapper[colorName] : '';

@@ -5,3 +5,8 @@ export enum ROUTE {
   CURRENCY_RATE = 'currency-rate',
   DAILY_ROUTINE = 'daily-routine',
 }
+
+export enum ROUTE_PUBLIC {
+  HOME = '/public',
+  CURRENCY_RATE = 'currency-rate',
+}
