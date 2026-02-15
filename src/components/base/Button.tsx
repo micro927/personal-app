@@ -73,7 +73,7 @@ function Button(
         onTouchEnd,
         // onMouseDown: onTouchStart,
         // onMouseUp: onTouchEnd,
-        // onMouseLeave: onTouchEnd,
+        onMouseLeave: onTouchEnd,
         onClick: undefined,
         style: {
           WebkitTouchCallout:
