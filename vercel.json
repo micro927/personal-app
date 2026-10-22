@@ -1,5 +1,10 @@
 {
+  "crons": [{ "path": "/api/keepalive", "schedule": "0 3 * * *" }],
   "routes": [
+    {
+      "src": "^/api/(.*)$",
+      "dest": "/api/$1"
+    },
     {
       "src": "^/shared(?:/.*)?$",
       "dest": "/shared.html"
